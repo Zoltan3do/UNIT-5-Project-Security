@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name="eventi")
+@Table(name="utenti")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -34,7 +34,7 @@ public class Utente {
     )
     private List<Evento> eventiPartecipati;
 
-    @OneToMany(mappedBy = "utente")
+    @OneToMany(mappedBy = "organizzatore")
     private List<Evento> eventiOrganizzati;
 
     public Utente(Ruolo ruolo, String username, String password, String nomeCompleto, List<Evento> eventiPartecipati) {
