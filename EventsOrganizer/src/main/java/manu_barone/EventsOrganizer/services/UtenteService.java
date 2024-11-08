@@ -1,7 +1,9 @@
 package manu_barone.EventsOrganizer.services;
 
+import manu_barone.EventsOrganizer.entities.Evento;
 import manu_barone.EventsOrganizer.entities.Utente;
 import manu_barone.EventsOrganizer.exceptions.NotFoundException;
+import manu_barone.EventsOrganizer.payloads.EventoDTO;
 import manu_barone.EventsOrganizer.payloads.UtenteDTO;
 import manu_barone.EventsOrganizer.repositories.UtenteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +49,23 @@ public class UtenteService {
 
     public Utente findByUsername(String username) throws NotFoundException{
         return this.ur.findByUsername(username).orElseThrow(()-> new NotFoundException("L'utente non è stato trovato"));
+    }
+
+    public void findByIdAndDelete(UUID id) throws NotFoundException {
+        this.ur.delete(this.findById(id));
+    }
+
+    public Utente findByIdAndUpdate(UUID id, UtenteDTO body) throws NotFoundException {
+        Utente e = this.findById(id);
+        e.setRuolo(body.ruolo());
+        e.setUsername(body.username());
+        e.setPassword(body.password());
+        e.setNomeCompleto(body.nomeCompleto());
+        return this.ur.save(e);
+    }
+
+    public Utente savePartecipazione(Utente utente,Evento evento){
+        utente.getEventiPartecipati().add(evento);
+        return  this.ur.save(utente);
     }
 }
