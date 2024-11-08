@@ -1,9 +1,14 @@
 package manu_barone.EventsOrganizer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import manu_barone.EventsOrganizer.entities.enums.Ruolo;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +18,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-public class Utente {
+@JsonIgnoreProperties({"password","role","enabled","accountNonLocked","credentialsNonExpired","accountNonExpired","authorities"})
+public class Utente implements UserDetails {
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
@@ -22,6 +28,7 @@ public class Utente {
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
 
+    @Column(unique = true)
     private String username;
     private String password;
     private String nomeCompleto;
@@ -44,4 +51,8 @@ public class Utente {
         this.nomeCompleto = nomeCompleto;
 }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(this.ruolo.name()));
+    }
 }
