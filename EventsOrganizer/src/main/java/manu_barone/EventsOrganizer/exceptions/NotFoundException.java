@@ -6,4 +6,7 @@ public class NotFoundException extends Exception{
     public NotFoundException(UUID id){
         super("Il record con id " + id + " non è stato trovato");
     }
+    public NotFoundException(String message){
+        super(message);
+    }
 }

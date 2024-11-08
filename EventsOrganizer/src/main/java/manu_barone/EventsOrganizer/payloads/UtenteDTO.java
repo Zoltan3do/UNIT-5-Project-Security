@@ -13,8 +13,8 @@ public record UtenteDTO (
         @Size(min=6, message = "username tropppo breve")
         String username,
         @NotEmpty
-        @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$\n", message
-        ="La password non segue i criteri comuni")
+//        @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$\n", message
+//        ="La password non segue i criteri comuni")
         String password,
         @NotEmpty
         @Size(min=6, message = "Nome completo troppo breve")

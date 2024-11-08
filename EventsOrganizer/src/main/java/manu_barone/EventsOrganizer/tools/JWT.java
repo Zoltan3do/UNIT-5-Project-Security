@@ -7,6 +7,7 @@ import manu_barone.EventsOrganizer.exceptions.UnothorizedException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Base64;
 import java.util.Date;
 
 @Component
@@ -20,7 +21,7 @@ public class JWT {
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
                 .subject(utente.getUsername())
-                .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
+                .signWith(Keys.hmacShaKeyFor(Base64.getDecoder().decode(secret)))
                 .compact();
     }
 
