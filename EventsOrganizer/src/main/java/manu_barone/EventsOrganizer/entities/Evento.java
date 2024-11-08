@@ -32,13 +32,12 @@ public class Evento {
     @JoinColumn(name="organizzatore_id")
     private Utente organizzatore;
 
-    public Evento(String titolo, String descrizione, LocalDate data, String luogo, int postiDisponibili, List<Utente> partecipanti, Utente organizzatore) {
+    public Evento(String titolo, String descrizione, LocalDate data, String luogo, int postiDisponibili, Utente organizzatore) {
         this.titolo = titolo;
         this.descrizione = descrizione;
         this.data = data;
         this.luogo = luogo;
         this.postiDisponibili = postiDisponibili;
-        this.partecipanti = partecipanti;
         this.organizzatore = organizzatore;
     }
 }

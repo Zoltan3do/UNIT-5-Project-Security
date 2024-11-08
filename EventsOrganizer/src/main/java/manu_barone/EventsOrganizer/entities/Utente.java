@@ -37,12 +37,11 @@ public class Utente {
     @OneToMany(mappedBy = "organizzatore")
     private List<Evento> eventiOrganizzati;
 
-    public Utente(Ruolo ruolo, String username, String password, String nomeCompleto, List<Evento> eventiPartecipati) {
+    public Utente(Ruolo ruolo, String username, String password, String nomeCompleto) {
         this.ruolo = ruolo;
         this.username = username;
         this.password = password;
         this.nomeCompleto = nomeCompleto;
-        this.eventiPartecipati = eventiPartecipati;
-    }
+}
 
 }
