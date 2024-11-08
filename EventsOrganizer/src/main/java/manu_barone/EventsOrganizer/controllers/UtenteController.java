@@ -40,6 +40,7 @@ public class UtenteController {
         this.us.findByIdAndDelete(current.getId());
     }
 
+    
     @GetMapping
     public Page<Utente> findAll(@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "10") int size,

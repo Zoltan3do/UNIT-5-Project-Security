@@ -31,6 +31,7 @@ public class EventoController {
     @Autowired
     private UtenteService us;
 
+    @PreAuthorize("hasAuthority('ORGANIZZATORE')")
     @GetMapping
     public Page<Evento> findAll(@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "10") int size,
@@ -38,6 +39,7 @@ public class EventoController {
         return this.es.findAll(page, size, sortBy);
     }
 
+    @PreAuthorize("hasAuthority('ORGANIZZATORE')")
     @PostMapping("/creaEvento")
     @ResponseStatus(HttpStatus.CREATED)
     public Evento save(@RequestBody @Validated EventoDTO body, BindingResult validationResult) throws NotFoundException {
@@ -62,6 +64,7 @@ public class EventoController {
         return this.es.findByIdAndUpdate(eventId, body);
     }
 
+    @PreAuthorize("hasAuthority('ORGANIZZATORE')")
     @PostMapping("{eventoid}/addPartecipante/{utenteId}")
     public Evento aggiungiPartecipante(@PathVariable UUID eventoId, @RequestBody EventoDTO event, @PathVariable UUID utenteId, @RequestBody UtenteDTO user) throws NotFoundException {
         if(es.isEventoPieno(eventoId)) throw new BadRequestException("L'evento ha raggiunto il numero massimo di posti");
