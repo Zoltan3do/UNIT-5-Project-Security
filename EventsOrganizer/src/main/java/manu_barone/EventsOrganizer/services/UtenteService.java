@@ -1,5 +1,6 @@
 package manu_barone.EventsOrganizer.services;
 
+import jakarta.validation.constraints.NotEmpty;
 import manu_barone.EventsOrganizer.entities.Evento;
 import manu_barone.EventsOrganizer.entities.Utente;
 import manu_barone.EventsOrganizer.exceptions.NotFoundException;
@@ -47,10 +48,6 @@ public class UtenteService {
         return this.ur.findById(utenteId).orElseThrow(() -> new NotFoundException(utenteId));
     }
 
-    public Utente findByUsername(String username) throws NotFoundException{
-        return this.ur.findByUsername(username).orElseThrow(()-> new NotFoundException("L'utente non è stato trovato"));
-    }
-
     public void findByIdAndDelete(UUID id) throws NotFoundException {
         this.ur.delete(this.findById(id));
     }
@@ -67,5 +64,9 @@ public class UtenteService {
     public Utente savePartecipazione(Utente utente,Evento evento){
         utente.getEventiPartecipati().add(evento);
         return  this.ur.save(utente);
+    }
+
+    public Utente findByUsername(@NotEmpty String username) throws NotFoundException {
+        return this.ur.findByUsername(username).orElseThrow(()-> new NotFoundException("Ciao"));
     }
 }

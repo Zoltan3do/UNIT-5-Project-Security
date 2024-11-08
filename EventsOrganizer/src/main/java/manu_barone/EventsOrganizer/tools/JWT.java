@@ -13,15 +13,15 @@ import java.util.Date;
 @Component
 public class JWT {
 
-    @Value("jwt.secret")
-    private String secret;
+//    @Value("jwt.secret")
+    private String secret = "cW5zR0hSMzRoaDVoamttdXZ3eGtzYXp5QWJjRGVmbGhpSk1OTnByTmxpYWZn"; // non riuscivo a recuperarlo dall'env properties
 
     public String createToken(Utente utente) {
         return Jwts.builder()
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
                 .subject(utente.getUsername())
-                .signWith(Keys.hmacShaKeyFor(Base64.getDecoder().decode(secret)))
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
     }
 

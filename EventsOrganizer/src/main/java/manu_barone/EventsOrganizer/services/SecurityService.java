@@ -23,10 +23,7 @@ public class SecurityService {
 
     public String checkCredentialsAndGenerateToken(LoginDTO body) throws NotFoundException {
         Utente found = this.us.findByUsername(body.username());
-        System.out.println("Risultato: " +  bcrypt.encode(body.password()).equals(found.getPassword())+" \n" +
-                bcrypt.encode(body.password())+"\n" +
-                found.getPassword());
-        if (bcrypt.matches(body.password() , found.getPassword())) {
+        if (bcrypt.matches(body.password(), found.getPassword())) {
             return jwt.createToken(found);
         } else {
             throw new UnothorizedException("Credenziali errate!");

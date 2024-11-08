@@ -1,6 +1,7 @@
 package manu_barone.EventsOrganizer.repositories;
 
 import manu_barone.EventsOrganizer.entities.Evento;
+import manu_barone.EventsOrganizer.entities.Utente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

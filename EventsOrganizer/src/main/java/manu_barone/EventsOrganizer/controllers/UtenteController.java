@@ -23,7 +23,6 @@ public class UtenteController {
 
 
     // ************************ ME ENDPOINTS **************************
-
     @GetMapping("/me")
     public Utente getProfile(@AuthenticationPrincipal Utente current) {
         return current;
@@ -40,20 +39,28 @@ public class UtenteController {
         this.us.findByIdAndDelete(current.getId());
     }
 
-    
+
     @GetMapping
     public Page<Utente> findAll(@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "10") int size,
-                                @RequestParam(defaultValue = "username") String sortBy) {
+                                @RequestParam(defaultValue = "id") String sortBy) {
         return this.us.findAll(page, size, sortBy);
     }
 
     @GetMapping("{id}/perEvento")
+    @PreAuthorize("hasAuthority('ORGANIZZATORE')")
     public Page<Utente> findByEvento(@PathVariable UUID id,
                                      @RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "10") int size,
                                      @RequestParam(defaultValue = "username") String sortBy) {
         return this.us.findByEvento(page, size, sortBy, id);
+    }
+
+
+    @GetMapping("{username}/findByUser")
+    @PreAuthorize("hasAuthority('ORGANIZZATORE')")
+    public Utente findByUsername(@PathVariable String username) throws NotFoundException {
+        return this.us.findByUsername(username);
     }
 
 }

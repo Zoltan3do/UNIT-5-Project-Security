@@ -15,5 +15,4 @@ import java.util.UUID;
 public interface UtenteRepo extends JpaRepository<Utente, UUID> {
     Optional<Utente> findByUsername(String username);
     Page<Utente> findByEventiPartecipatiId(Pageable pageable, UUID eventoId);
-
 }

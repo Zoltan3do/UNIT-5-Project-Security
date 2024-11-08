@@ -32,22 +32,48 @@ public class JWTChecker  extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer "))
-            throw new UnothorizedException("Inserire token nell' Authorization Header nel formato corretto !");
-        String accessToken = authorizationHeader.split(" ")[1];
-        jwt.verifyToken(accessToken);
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Inserire token nell' Authorization Header nel formato corretto !");
+            return;
+        }
 
-        String idUtente = jwt.getIdFromToken(accessToken);
+        String accessToken = authorizationHeader.split(" ")[1];
+
+        try {
+            jwt.verifyToken(accessToken);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token non valido o scaduto");
+            return;
+        }
+
+        String idFromToken = jwt.getIdFromToken(accessToken);
+        UUID idUtente;
+        try {
+            idUtente = UUID.fromString(idFromToken);
+        } catch (IllegalArgumentException e) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "ID del token non valido");
+            return;
+        }
+
         Utente utenteCorrente;
         try {
-            utenteCorrente = this.us.findById(UUID.fromString(idUtente));
+            utenteCorrente = this.us.findById(idUtente);
+            if (utenteCorrente == null) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Utente non trovato");
+                return;
+            }
         } catch (NotFoundException e) {
-            throw new RuntimeException(e);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Utente non trovato");
+            return;
         }
-        Authentication authentication = new UsernamePasswordAuthenticationToken(utenteCorrente,null,utenteCorrente.getAuthorities());
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(utenteCorrente, null, utenteCorrente.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        filterChain.doFilter(request,response);
+
+        filterChain.doFilter(request, response);
     }
+
+
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
